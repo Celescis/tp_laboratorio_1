@@ -9,54 +9,84 @@
 #include "Funciones.h"
 
 
-int Menu(void)
+int Menu(float x, float y)
 {
 	setbuf(stdout, NULL);
 	int opcion;
 
-	printf("\n1. Ingresar 1er operando \n2. Ingresar 2do operando \n3. Calcular todas las operaciones \n4. Informar resultados \n5. Salir \n¿Qué operación desea realizar?: ");
+	printf("\n1. Ingresar 1er operando (A= %.2f)",x);
+	printf("\n2. Ingresar 2do operando (B= %.2f)",y);
+	printf("\n3. Calcular todas las operaciones");
+	printf("\n   a) Calcular la suma (A+B)");
+	printf("\n   b) Calcular la resta (A-B)");
+	printf("\n   c) Calcular la division (A/B)");
+	printf("\n   d) Calcular la multiplicacion (A*B)");
+	printf("\n   e) Calcular el factorial (A!)");
+	printf("\n4. Informar resultados");
+	printf("\n5. Salir");
+	printf("\nElija una opción: ");
 	scanf("%d", &opcion);
 
 	return opcion;
 }
-int PedirNum1(int a)
+float Pedirx(void)
 {
+	float a;
+
 	printf("\nIngrese el 1er operando: ");
-	scanf("%d", &a);
+	scanf("%f", &a);
 
 	return a;
 }
-int PedirNum2(int b)
+float Pediry(void)
 {
-	printf("Ingrese el 2do operando: ");
-	scanf("%d", &b);
+	float b;
+
+	printf("\nIngrese el 2do operando: ");
+	scanf("%f", &b);
 
 	return b;
 }
 
-int Sumar(int a,int b)
+float Sumar(float a,float b)
 {
-	return (int)a + b;
+	float suma;
+
+	suma=(float)a+b;
+
+	return suma;
 }
 
-int Restar(int a, int b)
+float Restar(float a, float b)
 {
-	return (int)a - b;
+	float resta;
+
+	resta=(float)a-b;
+
+	return resta;
 }
 
-float Dividir(int a, int b)
+float Dividir(float a, float b)
 {
-	return (float)a/b;
+	int division;
+
+	division=(float)a/b;
+
+	return division;
 }
 
-int Multiplicar(int a, int b)
+float Multiplicar(float a, float b)
 {
-	return (int)a * b;
+	float multiplicacion;
+
+	multiplicacion=(float)a*b;
+
+	return multiplicacion;
 }
 
-int Factorial(int a)
+float Factorial(float a)
 {
-	int fac;
+	float fac;
 
 	if(a==1||a==0)
 	{

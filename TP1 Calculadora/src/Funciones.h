@@ -8,14 +8,22 @@
 #ifndef FUNCIONES_H_
 #define FUNCIONES_H_
 
-int Menu(void);
-int PedirNum1(int a);
-int PedirNum2(int b);
-int Sumar(int a,int b);
-int Restar(int a, int b);
-float Dividir(int a,int b);
-int Multiplicar(int a,int b);
-int Factorial(int a);
+int Menu(float, float);
+/**
+ * @fn int Menu(float, float)
+ * @brief Menu principal interactivo
+ *
+ * @param Recibe x mediante parametros
+ * @param Recibe y mediante parametros
+ * @return Retorna una opción para el switch
+ */
+float Pedirx(void);
+float Pediry(void);
+float Sumar(float,float);
+float Restar(float, float);
+float Dividir(float,float);
+float Multiplicar(float,float);
+float Factorial(float);
 
 
 #endif /* FUNCIONES_H_ */

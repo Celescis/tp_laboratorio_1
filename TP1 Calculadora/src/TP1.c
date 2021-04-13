@@ -23,93 +23,91 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Funciones.h"
+#define REALIZADO 1
+#define NO_REALIZADO 0
 
 int main (void)
 {
 	int opciones;
-	int num1;
-	int num2;
-	int pedirNumero1;
-	int pedirNumero2;
-	int suma;
-	int resta;
+	float x;
+	float y;
+	float suma;
+	float resta;
 	float division;
-	int multiplicacion;
-	int factorialNum1;
-	int factorialNum2;
-	int flag;
-	int seguir;
-
-	flag=0;
-	seguir=0;
+	float multiplicacion;
+	float factorialX;
+	float factorialY;
+	char seguir;
+	int flagX;
+	int flagY;
+	int flagFuncion;
 
 	setbuf(stdout, NULL);
+	seguir='s';
+	x=0;
+	y=0;
+	fflush(stdin);
+
 	do
 	{
-		opciones=Menu();
+		opciones=Menu(x,y);
 
 		switch(opciones)
 		{
-		case '1':
-			pedirNumero1=PedirNum1(num1);
-			flag=1;
+		case 1:
+			x=Pedirx();
+			flagX=REALIZADO;
 			break;
-		case '2':
-			if(flag==1)
-			{
-				PedirNum2(num2);
-				flag=2;
-			}
-			else
-			{
-				printf("Error, debe ingresar el primer operando");
-			}
+		case 2:
+			y=Pediry();
+			flagY=REALIZADO;
 			break;
-		case '3':
-			if(flag==2)
+		case 3:
+			if(flagX==REALIZADO && flagY==REALIZADO)
 			{
-				suma=Sumar(num1,num2);
-				resta=Restar(num1,num2);
-				division=Dividir(num1,num2);
-				multiplicacion=Multiplicar(num1,num2);
-				factorialNum1=Factorial(num1);
-				factorialNum2=Factorial(num2);
+				suma=Sumar(x,y);
+				resta=Restar(x,y);
+				division=Dividir(x,y);
+				multiplicacion=Multiplicar(x,y);
+				factorialX=Factorial(x);
+				factorialY=Factorial(y);
 
-				flag=3;
+				printf("\n...CALCULANDO...\n");
+				printf("¡Se han realizado los calculos con éxito!\n");
+				flagFuncion=REALIZADO;
 			}
 			else
 			{
-				printf("Error, debe ingresar el primer operando");
+				printf("Error, primero debe ingresar los operandos\n");
 			}
-		break;
-		case '4':
-			if(flag==3)
+			break;
+		case 4:
+			if(flagFuncion==REALIZADO)
 			{
-				printf("\nLa suma de los números es: %d \n", suma);
-				printf("\nLa resta de los números es: %d \n", resta);
-				if(num2==0)
+				printf("\nEl resultado de %.2f+%.2f es: %.2f\n", x,y,suma);
+				printf("\nEl resultado de %.2f-%.2f es: %.2f\n", x,y,resta);
+				if(y==0)
 				{
-				printf("\nNo es posible dividir por cero");
+				printf("\nNo es posible dividir por cero\n");
 				}else
 				{
-				printf("\nLa división de los números es: %.2f \n", division);
+				printf("\nEl resultado de %.2f/%.2f es: %.2f\n", x,y,division);
 				}
-				printf("\nLa multiplicación de los números es: %d \n", multiplicacion);
-				printf("\nEl factorial de %d es: %d y el factorial de %d es: %d",num1,factorialNum1,num2,factorialNum2);
+				printf("\nEl resultado de %.2f*%.2f es: %.2f\n", x,y,multiplicacion);
+				printf("\nEl factorial de %.2f es: %.2f y El factorial de %.2f es: %.2f\n",x,factorialX,y,factorialY);
 			}
 			else
 			{
-				printf("Error, primero debe seleccionar la función a realizar");
+				printf("Error, primero debe seleccionar las funciones");
 			}
-
-		break;
-		case '5':
+			break;
+		case 5:
 			printf("\nGracias por utilizar nuestro servicio");
-			seguir=-1;
+			seguir='n';
 			break;
 		}
 
-	}while(seguir=='0');
+	}while(seguir=='s');
 
 	return 0;
 }
