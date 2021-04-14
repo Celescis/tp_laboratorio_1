@@ -8,12 +8,15 @@
 #include <stdlib.h>
 #include "Funciones.h"
 
-
 int Menu(float x, float y)
 {
 	setbuf(stdout, NULL);
 	int opcion;
 
+	printf(" _________________________________________\n");
+	printf("|                                         |\n");
+	printf("|       BIENVENIDO A LA CALCULADORA       |\n");
+	printf("|_________________________________________|\n");
 	printf("\n1. Ingresar 1er operando (A= %.2f)",x);
 	printf("\n2. Ingresar 2do operando (B= %.2f)",y);
 	printf("\n3. Calcular todas las operaciones");
@@ -23,7 +26,7 @@ int Menu(float x, float y)
 	printf("\n   d) Calcular la multiplicacion (A*B)");
 	printf("\n   e) Calcular el factorial (A!)");
 	printf("\n4. Informar resultados");
-	printf("\n5. Salir");
+	printf("\n5. Salir\n");
 	printf("\nElija una opción: ");
 	scanf("%d", &opcion);
 
@@ -34,7 +37,7 @@ float Pedirx(void)
 	float a;
 
 	printf("\nIngrese el 1er operando: ");
-	scanf("%f", &a);
+	scanf("%.2f", &a);
 
 	return a;
 }
@@ -43,7 +46,7 @@ float Pediry(void)
 	float b;
 
 	printf("\nIngrese el 2do operando: ");
-	scanf("%f", &b);
+	scanf("%.2f", &b);
 
 	return b;
 }
@@ -84,9 +87,9 @@ float Multiplicar(float a, float b)
 	return multiplicacion;
 }
 
-float Factorial(float a)
+unsigned long int Factorial(int a)
 {
-	float fac;
+	unsigned long int fac;
 
 	if(a==1||a==0)
 	{

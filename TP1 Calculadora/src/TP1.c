@@ -35,8 +35,8 @@ int main (void)
 	float resta;
 	float division;
 	float multiplicacion;
-	float factorialX;
-	float factorialY;
+	unsigned long int factorialX;
+	unsigned long int factorialY;
 	char seguir;
 	int flagX;
 	int flagY;
@@ -72,8 +72,8 @@ int main (void)
 				factorialX=Factorial(x);
 				factorialY=Factorial(y);
 
-				printf("\n...CALCULANDO...\n");
-				printf("¡Se han realizado los calculos con éxito!\n");
+				printf("\n...........C A L C U L A N D O...........\n");
+				printf("¡Se han realizado los cálculos con éxito!\n");
 				flagFuncion=REALIZADO;
 			}
 			else
@@ -84,17 +84,17 @@ int main (void)
 		case 4:
 			if(flagFuncion==REALIZADO)
 			{
-				printf("\nEl resultado de %.2f+%.2f es: %.2f\n", x,y,suma);
-				printf("\nEl resultado de %.2f-%.2f es: %.2f\n", x,y,resta);
+				printf("\nEl resultado de (%.2f+%.2f) es: %.2f\n", x,y,suma);
+				printf("\nEl resultado de (%.2f-%.2f) es: %.2f\n", x,y,resta);
 				if(y==0)
 				{
 				printf("\nNo es posible dividir por cero\n");
 				}else
 				{
-				printf("\nEl resultado de %.2f/%.2f es: %.2f\n", x,y,division);
+				printf("\nEl resultado de (%.2f/%.2f) es: %.2f\n", x,y,division);
 				}
-				printf("\nEl resultado de %.2f*%.2f es: %.2f\n", x,y,multiplicacion);
-				printf("\nEl factorial de %.2f es: %.2f y El factorial de %.2f es: %.2f\n",x,factorialX,y,factorialY);
+				printf("\nEl resultado de (%.2f*%.2f) es: %.2f\n", x,y,multiplicacion);
+				printf("\nEl factorial de %d! es: %ld y El factorial de %d! es: %ld\n",(int)x,factorialX,(int)y,factorialY);
 			}
 			else
 			{
@@ -102,7 +102,7 @@ int main (void)
 			}
 			break;
 		case 5:
-			printf("\nGracias por utilizar nuestro servicio");
+			printf("\n¡Gracias por utilizar nuestro servicio!");
 			seguir='n';
 			break;
 		}
@@ -111,13 +111,4 @@ int main (void)
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
 
