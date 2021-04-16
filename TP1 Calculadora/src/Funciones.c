@@ -11,6 +11,7 @@
 int Menu(float x, float y)
 {
 	setbuf(stdout, NULL);
+	fflush(stdin);
 	int opcion;
 
 	printf(" _________________________________________\n");
@@ -32,21 +33,21 @@ int Menu(float x, float y)
 
 	return opcion;
 }
-float Pedirx(void)
+float PedirX(void)
 {
 	float a;
 
 	printf("\nIngrese el 1er operando: ");
-	scanf("%.2f", &a);
+	scanf("%f", &a);
 
 	return a;
 }
-float Pediry(void)
+float PedirY(void)
 {
 	float b;
 
 	printf("\nIngrese el 2do operando: ");
-	scanf("%.2f", &b);
+	scanf("%f", &b);
 
 	return b;
 }

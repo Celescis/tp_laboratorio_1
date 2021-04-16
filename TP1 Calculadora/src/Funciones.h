@@ -19,20 +19,20 @@
 int Menu(float, float);
 
 /**
- * @fn float Pedirx(void)
+ * @fn float PedirX(void)
  * @brief Función para pedir el primer valor de operando
  *
  * @return Devuelve el valor del primer operando
  */
-float Pedirx(void);
+float PedirX(void);
 
 /**
- * @fn float Pediry(void)
+ * @fn float PedirY(void)
  * @brief Función para pedir el segundo valor de operando
  *
  * @return Devuelve el valor del segundo operando
  */
-float Pediry(void);
+float PedirY(void);
 
 /**
  * @fn float Sumar(float, float)
