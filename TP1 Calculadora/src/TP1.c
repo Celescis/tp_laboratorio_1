@@ -55,11 +55,11 @@ int main (void)
 		switch(opciones)
 		{
 		case 1:
-			x=PedirX();
+			x=PedirNum();
 			flagX=REALIZADO;
 			break;
 		case 2:
-			y=PedirY();
+			y=PedirNum();
 			flagY=REALIZADO;
 			break;
 		case 3:

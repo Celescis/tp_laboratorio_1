@@ -33,23 +33,14 @@ int Menu(float x, float y)
 
 	return opcion;
 }
-float PedirX(void)
+float PedirNum(void)
 {
 	float a;
 
-	printf("\nIngrese el 1er operando: ");
+	printf("\nIngrese un operando: ");
 	scanf("%f", &a);
 
 	return a;
-}
-float PedirY(void)
-{
-	float b;
-
-	printf("\nIngrese el 2do operando: ");
-	scanf("%f", &b);
-
-	return b;
 }
 
 float Sumar(float a,float b)
