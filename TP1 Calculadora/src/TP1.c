@@ -105,6 +105,8 @@ int main (void)
 			printf("\n¡Gracias por utilizar nuestro servicio!");
 			seguir='n';
 			break;
+		default:
+			printf("ERROR, ingrese un número correcto (1-5)\n");
 		}
 
 	}while(seguir=='s');
