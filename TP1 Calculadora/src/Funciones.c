@@ -28,7 +28,7 @@ int Menu(float x, float y)
 	printf("\n   e) Calcular el factorial (A!)");
 	printf("\n4. Informar resultados");
 	printf("\n5. Salir\n");
-	printf("\nElija una opción: ");
+	printf("\nElija una opciÃ³n: ");
 	scanf("%d", &opcion);
 
 	return opcion;
@@ -63,7 +63,7 @@ float Restar(float a, float b)
 
 float Dividir(float a, float b)
 {
-	int division;
+	float division;
 
 	division=(float)a/b;
 
