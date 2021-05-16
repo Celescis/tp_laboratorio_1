@@ -63,7 +63,7 @@ float Restar(float a, float b)
 
 float Dividir(float a, float b)
 {
-	int division;
+	float division;
 
 	division=(float)a/b;
 
