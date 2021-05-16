@@ -79,7 +79,9 @@ int OrdenarEmpleados(eEmpleado lista[], int tam, int orden)
 			{
 				for(j=i+1;j<tam;j++)
 				{
-					if(((lista[i].idSector>lista[j].idSector) || (lista[i].idSector==lista[j].idSector)) && (strcmp(lista[i].apellido,lista[j].apellido)>0))
+					if((lista[i].idSector > lista[j].idSector) || (lista[i].idSector == lista[j].idSector &&
+					   strcmp(lista[i].apellido,lista[j].apellido) > 0) || ((lista[i].idSector == lista[j].idSector) &&
+					   strcmp(lista[i].apellido,lista[j].apellido) == 0  && strcmp(lista[i].nombre,lista[j].nombre) > 0))
 					{
 						auxEmpleado=lista[i];
 						lista[i]=lista[j];
@@ -96,7 +98,9 @@ int OrdenarEmpleados(eEmpleado lista[], int tam, int orden)
 			{
 				for(j=i+1;j<tam;j++)
 				{
-					if(((lista[i].idSector<lista[j].idSector) || (lista[i].idSector==lista[j].idSector)) && (strcmp(lista[i].apellido,lista[j].apellido)<0))
+					if((lista[i].idSector < lista[j].idSector) || (lista[i].idSector == lista[j].idSector &&
+					  strcmp(lista[i].apellido,lista[j].apellido) < 0) || ((lista[i].idSector == lista[j].idSector) &&
+					  strcmp(lista[i].apellido,lista[j].apellido) == 0  && strcmp(lista[i].nombre,lista[j].nombre) < 0))
 					{
 						auxEmpleado=lista[i];
 						lista[i]=lista[j];
