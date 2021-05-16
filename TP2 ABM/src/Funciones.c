@@ -151,6 +151,7 @@ int BajaEmpleado(eEmpleado lista[], int tam,eSector sectores[], int tamS, int *i
 		MostrarListaEmpleadosConSector(lista,tam,sectores,tamS);
 		utn_getInt("Ingrese el ID para dar de baja\n","Error, ID invalido\n",1,tam,2,id);//REVISAR TAM PQ TAM ES LA CANTIDAD DE EMPLEADOS NO ID
 		index=BuscarEmpleadosPorId(lista,tam,id);
+		printf("ID \t Nombre \t Apellido \t Salario \t Sector \n");
 		MostrarEmpleado(lista[index],sectores,tamS);
 		utn_getString("\n¿Esta seguro que desea eliminar este empleado?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,2,respuesta);
 		if(!(stricmp(respuesta,"si")))
@@ -175,6 +176,7 @@ int ModificarEmpleado(eEmpleado listaE[], int tamE, eSector listaS[], int tamS, 
 	MostrarListaEmpleadosConSector(listaE,tamE,listaS,tamS);
 	utn_getInt("Ingrese el ID del empleado a modificar: \n","Error, ID invalido\n",1,tamE,2,&auxId);
 	index=BuscarEmpleadosPorId(listaE, tamE, &auxId);
+	printf("ID \t Nombre \t Apellido \t Salario \t Sector \n");
 	MostrarEmpleado(listaE[index],listaS,tamS);
 	utn_getString("¿Esta seguro que desea modificar este empleado? [si/no]\n","Error, ingrese [si/no]\n",4,2,respuesta);
 	if(!(stricmp(respuesta,"si")))
