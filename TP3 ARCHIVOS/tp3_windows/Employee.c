@@ -37,9 +37,7 @@ Employee* employee_newParametros(char* idStr, char* nombreStr, char* horasTrabaj
 			if(((employee_setId(pEmpleadoParam,atoi(idStr)) || (employee_setNombre(pEmpleadoParam,nombreStr)) || (employee_setHorasTrabajadas(pEmpleadoParam,atoi(horasTrabajadasStr))) || (employee_setSueldo(pEmpleadoParam,atoi(sueldoStr))))!=0))
 			{
 				employee_delete(pEmpleadoParam);
-				printf("ok");
 			}
-
 		}
 	}
 
@@ -153,7 +151,7 @@ int employee_printList(LinkedList* listaEmpleados)
 
 			for(i=0; i<len ;i++)
 			{
-				employee_printOne(listaEmpleados,i);
+				employee_printOne(listaEmpleados,i);//CAMBIAR A PRINTEMPLOYEE, ACHICARLA
 
 				isOk=0;
 			}
@@ -259,15 +257,17 @@ int employee_menuOrden()
 	int opciones;
 
 	printf("\n\t>-MENU ORDEN-<\t\n");
-	printf("1. Ordenar por nombre A-Z\n");
-	printf("2. Ordenar por nombre Z-A\n");
-	printf("3. Ordenar por horas trabajadas ascendente\n");
-	printf("4. Ordenar por horas trabajadas descendente\n");
-	printf("5. Ordenar por sueldo ascendente\n");
-	printf("6. Ordenar por sueldo descendente\n");
+	printf("1. Ordenar por ID ascendente\n");
+	printf("2. Ordenar por ID descendente\n");
+	printf("3. Ordenar por nombre A-Z\n");
+	printf("4. Ordenar por nombre Z-A\n");
+	printf("5. Ordenar por horas trabajadas ascendente\n");
+	printf("6. Ordenar por horas trabajadas descendente\n");
+	printf("7. Ordenar por sueldo ascendente\n");
+	printf("8. Ordenar por sueldo descendente\n");
 	printf("0. Salir\n");
 
-	utn_getInt("\nIngrese una opcion: ","\nError, opcion invalida: ",0,6,3,&opciones);
+	utn_getInt("\nIngrese una opcion: ","\nError, opcion invalida: ",0,8,3,&opciones);
 
 	return opciones;
 }
@@ -659,6 +659,29 @@ int employee_modifySueldo(LinkedList* listaEmpleados, int index, int auxSueldo)
     return isOk;
 }
 //-----------------------------------------ORDENADORES-----------------------------------------
+int employee_compareById(void* empleado1, void* empleado2)
+{
+	int resultado = 0;//si son iguales
+	Employee* id1;
+	Employee* id2;
+
+	id1 = (Employee*)empleado1;
+	id2 = (Employee*)empleado2;
+
+	if(id1->id > id2->id)//mayores
+	{
+		resultado=1;
+	}
+	else
+	{
+		if(id1->id < id2->id)//menores
+		{
+			resultado=-1;
+		}
+	}
+
+	return resultado;
+}
 int employee_compareByNombre(void* empleado1, void* empleado2)
 {
 	int resultado;
@@ -672,16 +695,51 @@ int employee_compareByNombre(void* empleado1, void* empleado2)
 
 	return resultado;
 }
+
 int employee_compareByHorasTrabajadas(void* empleado1, void* empleado2)
 {
-	int resultado;
+	int resultado = 0;//si son iguales
 	Employee* horas1;
 	Employee* horas2;
 
 	horas1 = (Employee*)empleado1;
 	horas2 = (Employee*)empleado2;
 
+	if(horas1->horasTrabajadas > horas2->horasTrabajadas)//mayores
+	{
+		resultado=1;
+	}
+	else
+	{
+		if(horas1->horasTrabajadas < horas2->horasTrabajadas)//menores
+		{
+			resultado=-1;
+		}
+	}
 
+	return resultado;
+}
+
+int employee_compareBySueldo(void* empleado1, void* empleado2)
+{
+	int resultado = 0;//si son iguales
+	Employee* sueldo1;
+	Employee* sueldo2;
+
+	sueldo1 = (Employee*)empleado1;
+	sueldo2 = (Employee*)empleado2;
+
+	if(sueldo1->sueldo > sueldo2->sueldo)//mayores
+	{
+		resultado=1;
+	}
+	else
+	{
+		if(sueldo1->sueldo < sueldo2->sueldo)//menores
+		{
+			resultado=-1;
+		}
+	}
 
 	return resultado;
 }

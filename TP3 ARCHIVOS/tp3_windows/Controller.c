@@ -157,31 +157,52 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
 					utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
 					break;
 				case 1:
+					if(!ll_sort(pArrayListEmployee,employee_compareById,1))
+					{
+						printf("Se ha ordenado la lista por id ascendente");
+					}
+					break;
+				case 2:
+					if(!ll_sort(pArrayListEmployee,employee_compareById,0))
+					{
+						printf("Se ha ordenado la lista por id descendente");
+					}
+					break;
+				case 3:
 					if(!ll_sort(pArrayListEmployee,employee_compareByNombre,1))
 					{
 						printf("Se ha ordenado la lista por nombre de A-Z");
 					}
 					break;
-				case 2:
-					if(!ll_sort(pArrayListEmployee,employee_compareByNombre,0))
-					{
-						printf("Se ha ordenado la lista por nombre de Z-A");
-					}
-					break;
-				case 3:
-					if(!ll_sort(pArrayListEmployee,employee_compareByNombre,0))
-					{
-						printf("Se ha ordenado la lista por nombre de Z-A");
-					}
-					break;
 				case 4:
-
+					if(!ll_sort(pArrayListEmployee,employee_compareByNombre,0))
+					{
+						printf("Se ha ordenado la lista por nombre de Z-A");
+					}
 					break;
 				case 5:
-
+					if(!ll_sort(pArrayListEmployee,employee_compareByHorasTrabajadas,1))
+					{
+						printf("Se ha ordenado la lista por horas ascendente");
+					}
 					break;
 				case 6:
-
+					if(!ll_sort(pArrayListEmployee,employee_compareByHorasTrabajadas,0))
+					{
+						printf("Se ha ordenado la lista por horas descendente");
+					}
+					break;
+				case 7:
+					if(!ll_sort(pArrayListEmployee,employee_compareBySueldo,1))
+					{
+						printf("Se ha ordenado la lista por sueldo ascendente");
+					}
+					break;
+				case 8:
+					if(!ll_sort(pArrayListEmployee,employee_compareBySueldo,0))
+					{
+						printf("Se ha ordenado la lista por sueldo descendente");
+					}
 					break;
 			}
 		}while(stricmp(confirmar,"si"));
