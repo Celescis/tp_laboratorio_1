@@ -5,8 +5,8 @@
 #include "Employee.h"
 #include "parser.h"
 #include "Utn.h"
+#include "Menus.h"
 #include "Controller.h"
-
 
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo texto).
  *
@@ -17,7 +17,7 @@
  */
 int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 {
-	int isOk=-1;
+	int isOk = -1;
 	FILE* pArchivo;
 
 	if(path!=NULL && pArrayListEmployee!=NULL)
@@ -53,7 +53,30 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int isOk = -1;
+	FILE* pArchivo;
+
+	if(path!=NULL && pArrayListEmployee!=NULL)
+	{
+		pArchivo = fopen(path,"rb");
+
+		if(pArchivo!= NULL)
+		{
+			if(!parser_EmployeeFromBinary(pArchivo, pArrayListEmployee))
+			{
+				printf("Se cargo con exito\n");
+				isOk=0;
+			}
+		}
+		else
+		{
+			printf("Error al abrir el archivo\n");
+		}
+		fclose(pArchivo);
+	}
+
+
+    return isOk;
 }
 
 /** \brief Alta de empleados
@@ -90,7 +113,20 @@ int controller_addEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_editEmployee(LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int isOk = -1;
+
+	if(pArrayListEmployee!=NULL)
+	{
+		if(!employee_modify(pArrayListEmployee))
+		{
+			printf("Se ha modificado con exito");
+		}
+		else
+		{
+			printf("No se han podido actualizar los datos");
+		}
+	}
+	return isOk;
 }
 
 /** \brief Baja de empleado
@@ -145,64 +181,88 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
 	int isOk = -1;
+	int criterio;
+	int opcion;
 	char confirmar[4];
-
-	if(pArrayListEmployee!=NULL)
+	strcpy(confirmar,"no");
+	LinkedList* clon; //= ll_newLinkedList();
+	clon = ll_clone(pArrayListEmployee);
+	if(pArrayListEmployee!=NULL && clon!=NULL)
 	{
 		do
 		{
-			switch(employee_menuOrden())
+			opcion = employee_menuOrden();
+			if(opcion!=0 && opcion!=5)
+			{
+				criterio = employee_subMenuOrden();
+			}
+			switch(opcion)
 			{
 				case 0:
 					utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
 					break;
 				case 1:
-					if(!ll_sort(pArrayListEmployee,employee_compareById,1))
+					if(!ll_sort(clon,employee_compareById,criterio))
 					{
-						printf("Se ha ordenado la lista por id ascendente");
+						if(criterio)
+						{
+							printf("Se ha ordenado la lista por id ascendente");
+						}
+						else
+						{
+							if(!criterio)
+							{
+								printf("Se ha ordenado la lista por id descendente");
+							}
+						}
 					}
 					break;
 				case 2:
-					if(!ll_sort(pArrayListEmployee,employee_compareById,0))
-					{
-						printf("Se ha ordenado la lista por id descendente");
-					}
-					break;
-				case 3:
-					if(!ll_sort(pArrayListEmployee,employee_compareByNombre,1))
+					ll_sort(clon,employee_compareByNombre,criterio);
+					if(criterio)
 					{
 						printf("Se ha ordenado la lista por nombre de A-Z");
 					}
-					break;
-				case 4:
-					if(!ll_sort(pArrayListEmployee,employee_compareByNombre,0))
+					else
 					{
-						printf("Se ha ordenado la lista por nombre de Z-A");
+						if(!criterio)
+						{
+							printf("Se ha ordenado la lista por nombre de Z-A");
+						}
 					}
 					break;
-				case 5:
-					if(!ll_sort(pArrayListEmployee,employee_compareByHorasTrabajadas,1))
+				case 3:
+					ll_sort(clon,employee_compareByHorasTrabajadas,criterio);
+					if(criterio)
 					{
+
 						printf("Se ha ordenado la lista por horas ascendente");
 					}
-					break;
-				case 6:
-					if(!ll_sort(pArrayListEmployee,employee_compareByHorasTrabajadas,0))
+					else
 					{
-						printf("Se ha ordenado la lista por horas descendente");
+						if(!criterio)
+						{
+							printf("Se ha ordenado la lista por horas descendente");
+						}
 					}
 					break;
-				case 7:
-					if(!ll_sort(pArrayListEmployee,employee_compareBySueldo,1))
+				case 4:
+					ll_sort(clon,employee_compareBySueldo,criterio);
+					if(criterio)
 					{
 						printf("Se ha ordenado la lista por sueldo ascendente");
 					}
-					break;
-				case 8:
-					if(!ll_sort(pArrayListEmployee,employee_compareBySueldo,0))
+					else
 					{
-						printf("Se ha ordenado la lista por sueldo descendente");
+						if(!criterio)
+						{
+							printf("Se ha ordenado la lista por sueldo descendente");
+						}
+
 					}
+					break;
+				case 5:
+					controller_ListEmployee(clon);
 					break;
 			}
 		}while(stricmp(confirmar,"si"));
@@ -220,7 +280,53 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int isOk = -1;
+	int i;
+	int len;
+	int auxiliarID;
+	char auxiliarNombre[128];
+	int auxiliarSueldo;
+	int auxiliarHoras;
+	FILE* pArchivo;
+	Employee* aux = NULL;
+
+	if(path!=NULL && pArrayListEmployee!=NULL)
+	{
+		pArchivo = fopen(path,"w");
+
+		len=ll_len(pArrayListEmployee);
+
+		if(pArchivo!= NULL && len>0)
+		{
+			for(i=0; i<len ;i++)
+			{
+				aux = ll_get(pArrayListEmployee,i);
+				if(aux!=NULL)
+				{
+					if(!employee_getVerify(aux,&auxiliarID,auxiliarNombre,&auxiliarHoras,&auxiliarSueldo))
+					{
+						fprintf(pArchivo,"%d,%s,%d,%d\n",auxiliarID,auxiliarNombre,auxiliarHoras,auxiliarSueldo);
+						isOk=0;
+					}
+					else
+					{
+						employee_delete(aux);
+						printf("No se pudo guardar el archivo\n");
+					}
+				}
+			}
+		}
+		else
+		{
+			printf("Error al abrir el archivo\n");
+		}
+	}
+	fclose(pArchivo);
+	if(!isOk)
+	{
+		printf("El archivo fue guardado con exito!\n");
+	}
+	return isOk;
 }
 
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo binario).
@@ -232,6 +338,41 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
  */
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 {
-    return 1;
+	int isOk = -1;
+	int i;
+	int len;
+	FILE* pArchivo;
+	Employee* aux = NULL;
+
+	if(path!=NULL && pArrayListEmployee!=NULL)
+	{
+		len = ll_len(pArrayListEmployee);
+		pArchivo = fopen(path,"wb");
+
+		if(pArchivo!= NULL && len>0)
+		{
+			for(i=0; i<len ;i++)
+			{
+				aux = (Employee*) ll_get(pArrayListEmployee,i);
+
+				if(aux!=NULL)
+				{
+					fwrite(aux,sizeof(Employee),1,pArchivo);
+					isOk=0;
+				}
+			}
+			fclose(pArchivo);
+		}
+		else
+		{
+			printf("Error al abrir el archivo\n");
+		}
+		if(!isOk)
+		{
+			printf("Se guardo con exito\n");
+		}
+	}
+
+    return isOk;
 }
 

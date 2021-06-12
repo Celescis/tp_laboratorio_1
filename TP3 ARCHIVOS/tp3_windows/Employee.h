@@ -13,20 +13,16 @@ Employee* employee_newParametros(char* idStr, char* nombreStr, char* horasTrabaj
 void employee_delete(Employee* this);
 
 int ObtenerMayorId(LinkedList* listaEmpleados);
-Employee* AuxiliarEmpleado(LinkedList* listaEmpleados, int* id, int* index);//no me sirve
 int employee_findID(LinkedList* listaEmpleados, int id);
 
-int Menu(void);
-int employee_menuModify(void);
-int employee_menuOrden(void);
-
-int employee_printEmployee(Employee* this);
-int employee_printOne(LinkedList* listaEmpleados, int index);
+int employee_printOneEmployee(Employee* this);
 int employee_printList(LinkedList* listaEmpleados);
 
 int employee_add(LinkedList* listaEmpleados);
 int employee_remove(LinkedList* listaEmpleados);
 int employee_modify(LinkedList* listaEmpleados);
+int employee_setVerify(Employee* this, char* idStr, char* nombreStr, char* horasTrabajadasStr, char* sueldoStr);
+int employee_getVerify(Employee* this, int* id, char* nombre, int* horasTrabajadas, int* sueldo);
 
 int employee_setId(Employee* this, int id);
 int employee_getId(Employee* this, int* id);

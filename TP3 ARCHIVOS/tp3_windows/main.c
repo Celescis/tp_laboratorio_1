@@ -13,6 +13,7 @@
 #include "LinkedList.h"
 #include "Controller.h"
 #include "Employee.h"
+#include "Menus.h"
 #include "Utn.h"
 
 /****************************************************
@@ -44,7 +45,7 @@ int main()
 				controller_loadFromText("data.csv", listaEmpleados);
 				break;
 			case 2:
-
+				controller_loadFromBinary("data.bin",listaEmpleados);
 				break;
 			case 3:
 				if(!ll_isEmpty(listaEmpleados))
@@ -61,7 +62,7 @@ int main()
 				if(!ll_isEmpty(listaEmpleados))
 				{
 					printf("MODIFICACION DE EMPLEADOS\n");
-					employee_modify(listaEmpleados);
+					controller_editEmployee(listaEmpleados);
 				}
 				else
 				{
@@ -101,10 +102,24 @@ int main()
 				}
 				break;
 			case 8:
-
+				if(!ll_isEmpty(listaEmpleados))
+				{
+					controller_saveAsText("data2.csv",listaEmpleados);
+				}
+				else
+				{
+					printf("No hay nada para mostrar");
+				}
 				break;
 			case 9:
-
+				if(!ll_isEmpty(listaEmpleados))
+				{
+					controller_saveAsBinary("data.bin",listaEmpleados);
+				}
+				else
+				{
+					printf("No hay nada para mostrar");
+				}
 				break;
 			case 10:
 				utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);

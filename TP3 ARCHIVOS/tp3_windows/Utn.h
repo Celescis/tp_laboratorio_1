@@ -46,6 +46,7 @@ int getString(char string[], int tam);
  * @return devuelve -1 si salio todo mal, devuelve 0 si salio todo bien
  */
 int utn_getString(char mensaje[], char mensajeError[], int tam, int reintentos,char input[]);
+int utn_getStringInt(char mensaje[], char mensajeError[], int tam, int reintentos, char input[]);
 //-----------------------------------------------INT-----------------------------------------------------
 /**
  * @fn int isInt(char[])

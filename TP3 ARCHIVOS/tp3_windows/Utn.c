@@ -98,6 +98,33 @@ int utn_getString(char mensaje[], char mensajeError[], int tam, int reintentos, 
 
     return isOk;
 }
+int utn_getStringInt(char mensaje[], char mensajeError[], int tam, int reintentos, char input[])
+{
+	int isOk = 1;
+    char auxString[tam];
+
+    if(input != NULL && mensaje != NULL && mensajeError != NULL && tam > 0 && reintentos >= 0)
+    {
+        do
+        {
+        	printf("%s", mensaje);
+            if(!(getString(auxString,tam)) && (isChar(auxString)!=0))
+            {
+                strncpy(input,auxString,tam);
+                isOk = 0;
+                break;
+            }
+            else
+            {
+            	printf("%s", mensajeError);
+            	reintentos--;
+            }
+
+        }while(reintentos>=0);
+    }
+
+    return isOk;
+}
 //-----------------------------------INT-----------------------------------
 int isInt(char input[])
 {
@@ -156,6 +183,7 @@ int utn_getInt(char mensaje[], char mensajeError[], int min, int max, int reinte
 
     return isOk;
 }
+
 //-----------------------------------FLOAT-----------------------------------
 int isFloat(char input[])
 {
