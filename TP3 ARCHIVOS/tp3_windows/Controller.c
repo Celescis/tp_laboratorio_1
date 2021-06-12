@@ -35,7 +35,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 		else
 		{
 			printf("Error al abrir el archivo\n");
-			exit(1);
+			exit(10);
 		}
 		fclose(pArchivo);
 	}

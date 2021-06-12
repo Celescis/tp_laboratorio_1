@@ -310,7 +310,7 @@ int employee_add(LinkedList* listaEmpleados)
 					}
 					else
 					{
-						employee_delete(auxEmpleado);
+						employee_delete(auxEmpleado);//libero la memoria en cada caso que no haya salido?
 					}
 				}
 				else
@@ -321,6 +321,7 @@ int employee_add(LinkedList* listaEmpleados)
 			else
 			{
 				printf("\nReintente nuevamente");
+				employee_delete(auxEmpleado);
 			}
 		}
 		else
