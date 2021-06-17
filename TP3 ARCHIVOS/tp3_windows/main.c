@@ -15,6 +15,8 @@
 #include "Employee.h"
 #include "Menus.h"
 #include "Utn.h"
+#define REALIZADO 1
+#define NO_REALIZADO 0
 
 /****************************************************
     Menu:
@@ -34,6 +36,9 @@ int main()
 {
 	setbuf(stdout,NULL);
 	char confirmar[4];
+	int flagTxt = NO_REALIZADO;
+	int flagBin = NO_REALIZADO;
+	int id=0;
 	strcpy(confirmar,"no");
 	LinkedList* listaEmpleados = ll_newLinkedList();
 
@@ -42,26 +47,48 @@ int main()
 		switch(Menu())
 		{
 			case 1:
-				controller_loadFromText("data.csv", listaEmpleados);
-				break;
-			case 2:
-				controller_loadFromBinary("data.bin",listaEmpleados);
-				break;
-			case 3:
-				if(!ll_isEmpty(listaEmpleados))
+				if(ll_isEmpty(listaEmpleados) || (flagTxt==NO_REALIZADO && flagBin==NO_REALIZADO))
 				{
-					printf("ALTA DE EMPLEADOS\n");
-					controller_addEmployee(listaEmpleados);
+					if(!controller_loadFromText("data.csv", listaEmpleados))
+					{
+						flagTxt=REALIZADO;
+					}
+					else
+					{
+						flagTxt=NO_REALIZADO;
+					}
 				}
 				else
 				{
-					printf("Primero debe cargar los datos de los empleados existentes del archivo.");
+					printf("No puedes cargar el archivo dos veces");
+				}
+				break;
+			case 2:
+				if(ll_isEmpty(listaEmpleados) || (flagBin==NO_REALIZADO && flagTxt==NO_REALIZADO))
+				{
+					if(!controller_loadFromBinary("data.bin",listaEmpleados))
+					{
+						flagBin=REALIZADO;
+					}
+					else
+					{
+						flagBin=NO_REALIZADO;
+					}
+				}
+				else
+				{
+					printf("No puedes cargar el archivo dos veces");
+				}
+				break;
+			case 3:
+				if((!controller_loadFromTextID("id.csv", listaEmpleados, &id)) && (!controller_addEmployee(listaEmpleados,&id)))
+				{
+					controller_saveAsTextID("id.csv",listaEmpleados,id);
 				}
 				break;
 			case 4:
 				if(!ll_isEmpty(listaEmpleados))
 				{
-					printf("MODIFICACION DE EMPLEADOS\n");
 					controller_editEmployee(listaEmpleados);
 				}
 				else
@@ -72,7 +99,6 @@ int main()
 			case 5:
 				if(!ll_isEmpty(listaEmpleados))
 				{
-					printf("BAJA DE EMPLEADOS\n");
 					controller_removeEmployee(listaEmpleados);
 				}
 				else
@@ -83,12 +109,11 @@ int main()
 			case 6:
 				if(!ll_isEmpty(listaEmpleados))
 				{
-					printf("LISTA DE EMPLEADOS\n");
 					controller_ListEmployee(listaEmpleados);
 				}
 				else
 				{
-					printf("No hay nada para mostrar");
+					printf("No hay empleados para mostrar");
 				}
 				break;
 			case 7:
@@ -98,17 +123,18 @@ int main()
 				}
 				else
 				{
-					printf("No hay nada para mostrar");
+					printf("No hay empleados para mostrar");
 				}
 				break;
 			case 8:
 				if(!ll_isEmpty(listaEmpleados))
 				{
 					controller_saveAsText("data2.csv",listaEmpleados);
+					//controller_saveAsTextID("id.csv",listaEmpleados,id);
 				}
 				else
 				{
-					printf("No hay nada para mostrar");
+					printf("No hay empleados para guardar");
 				}
 				break;
 			case 9:
@@ -118,7 +144,7 @@ int main()
 				}
 				else
 				{
-					printf("No hay nada para mostrar");
+					printf("No hay empleados para guardar");
 				}
 				break;
 			case 10:

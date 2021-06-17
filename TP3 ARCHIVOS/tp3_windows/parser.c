@@ -49,6 +49,29 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
     return isOk;
 }
 
+int parser_IdFromText(FILE* pFile , LinkedList* pArrayListEmployee, int* id)
+{
+	int isOk = -1;
+	char idTxt[128];
+	int cantidad = 0;
+
+	if(pFile!=NULL && pArrayListEmployee!=NULL)
+	{
+		do
+		{
+			cantidad = fscanf(pFile,"%[^\n]\n",idTxt);
+
+			if(cantidad==1)
+			{
+				isOk = 0;
+				*id = atoi(idTxt);
+			}
+		}
+		while(!feof(pFile));
+	}
+
+    return isOk;
+}
 
 /** \brief Parsea los datos los datos de los empleados desde el archivo data.csv (modo binario).
  *
@@ -60,20 +83,17 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 int parser_EmployeeFromBinary(FILE* pFile , LinkedList* pArrayListEmployee)
 {
 	int isOk = -1;
-	int lectura=1;
 	Employee* auxiliar = NULL;
 
 	if(pFile!=NULL && pArrayListEmployee!=NULL)
 	{
-		auxiliar = employee_new();
-
 		do
 		{
+			auxiliar = employee_new();
+
 			if(auxiliar!=NULL)
 			{
-				lectura = fread(auxiliar,sizeof(Employee),1,pFile);
-
-				if(lectura==1)
+				if(fread(auxiliar,sizeof(Employee),1,pFile))
 				{
 					ll_add(pArrayListEmployee,auxiliar);
 					isOk=0;

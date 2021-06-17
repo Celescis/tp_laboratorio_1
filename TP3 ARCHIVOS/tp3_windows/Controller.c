@@ -44,6 +44,27 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
     return isOk;
 }
 
+int controller_loadFromTextID(char* path , LinkedList* pArrayListEmployee, int* id)
+{
+	int isOk = -1;
+	FILE* pArchivo;
+
+	if(path!=NULL && pArrayListEmployee!=NULL)
+	{
+		pArchivo = fopen(path,"r");
+
+		if(pArchivo!= NULL)
+		{
+			if(!parser_IdFromText(pArchivo,pArrayListEmployee,id))
+			{
+				isOk = 0;
+			}
+		}
+		fclose(pArchivo);
+	}
+
+    return isOk;
+}
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo binario).
  *
  * \param path char*
@@ -67,14 +88,13 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 				printf("Se cargo con exito\n");
 				isOk=0;
 			}
+			fclose(pArchivo);
 		}
 		else
 		{
 			printf("Error al abrir el archivo\n");
 		}
-		fclose(pArchivo);
 	}
-
 
     return isOk;
 }
@@ -86,13 +106,26 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
  * \return int
  *
  */
-int controller_addEmployee(LinkedList* pArrayListEmployee)
+int controller_addEmployee(LinkedList* pArrayListEmployee, int* id)
 {
 	int isOk = -1;
+	int opcion;
+	int i=0;
 
 	if(pArrayListEmployee!=NULL)
 	{
-		if(!employee_add(pArrayListEmployee))
+		printf("ALTA DE EMPLEADOS\n");
+		utn_getInt("\n¿Cuantos empleados desea dar de alta?: ","\nError, reingrese: ",1,10,3,&opcion);
+		do
+		{
+			if(!employee_add(pArrayListEmployee,id))
+			{
+				isOk=0;
+			}
+			i++;
+		}while(opcion!=i);
+
+		if(!isOk)
 		{
 			printf("Se ha dado de alta correctamente");
 		}
@@ -117,6 +150,7 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 
 	if(pArrayListEmployee!=NULL)
 	{
+		printf("MODIFICACION DE EMPLEADOS\n");
 		if(!employee_modify(pArrayListEmployee))
 		{
 			printf("Se ha modificado con exito");
@@ -139,10 +173,22 @@ int controller_editEmployee(LinkedList* pArrayListEmployee)
 int controller_removeEmployee(LinkedList* pArrayListEmployee)
 {
 	int isOk = -1;
+	int opcion;
+	int i=0;
 
-	if(!employee_remove(pArrayListEmployee))
+	if(pArrayListEmployee!=NULL)
 	{
-		isOk=0;
+		printf("BAJA DE EMPLEADOS\n");
+		utn_getInt("\n¿Cuantos empleados desea dar de baja?: ","\nError, reingrese: ",1,10,3,&opcion);
+
+		do
+		{
+			if(!employee_remove(pArrayListEmployee))
+			{
+				isOk=0;
+			}
+			i++;
+		}while(opcion!=i);
 	}
 
     return isOk;
@@ -161,6 +207,7 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
 
 	if(pArrayListEmployee!=NULL)
 	{
+		printf("LISTA DE EMPLEADOS\n");
 		if(employee_printList(pArrayListEmployee)!=0)
 		{
 			printf("No hay empleados para mostrar");
@@ -185,87 +232,91 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
 	int opcion;
 	char confirmar[4];
 	strcpy(confirmar,"no");
-	LinkedList* clon; //= ll_newLinkedList();
-	clon = ll_clone(pArrayListEmployee);
-	if(pArrayListEmployee!=NULL && clon!=NULL)
+	LinkedList* clon;
+	if(pArrayListEmployee!=NULL)
 	{
-		do
+		clon = ll_clone(pArrayListEmployee);
+
+		if(clon!=NULL)
 		{
-			opcion = employee_menuOrden();
-			if(opcion!=0 && opcion!=5)
+			do
 			{
-				criterio = employee_subMenuOrden();
-			}
-			switch(opcion)
-			{
-				case 0:
-					utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
-					break;
-				case 1:
-					if(!ll_sort(clon,employee_compareById,criterio))
-					{
+				opcion = employee_menuOrden();
+				if(opcion!=0 && opcion!=5)
+				{
+					criterio = employee_subMenuOrden();
+				}
+				switch(opcion)
+				{
+					case 0:
+						utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
+						break;
+					case 1:
+						if(!ll_sort(clon,employee_compareById,criterio))
+						{
+							if(criterio)
+							{
+								printf("Se ha ordenado la lista por id ascendente");
+							}
+							else
+							{
+								if(!criterio)
+								{
+									printf("Se ha ordenado la lista por id descendente");
+								}
+							}
+						}
+						break;
+					case 2:
+						ll_sort(clon,employee_compareByNombre,criterio);
 						if(criterio)
 						{
-							printf("Se ha ordenado la lista por id ascendente");
+							printf("Se ha ordenado la lista por nombre de A-Z");
 						}
 						else
 						{
 							if(!criterio)
 							{
-								printf("Se ha ordenado la lista por id descendente");
+								printf("Se ha ordenado la lista por nombre de Z-A");
 							}
 						}
-					}
-					break;
-				case 2:
-					ll_sort(clon,employee_compareByNombre,criterio);
-					if(criterio)
-					{
-						printf("Se ha ordenado la lista por nombre de A-Z");
-					}
-					else
-					{
-						if(!criterio)
+						break;
+					case 3:
+						ll_sort(clon,employee_compareByHorasTrabajadas,criterio);
+						if(criterio)
 						{
-							printf("Se ha ordenado la lista por nombre de Z-A");
-						}
-					}
-					break;
-				case 3:
-					ll_sort(clon,employee_compareByHorasTrabajadas,criterio);
-					if(criterio)
-					{
 
-						printf("Se ha ordenado la lista por horas ascendente");
-					}
-					else
-					{
-						if(!criterio)
-						{
-							printf("Se ha ordenado la lista por horas descendente");
+							printf("Se ha ordenado la lista por horas ascendente");
 						}
-					}
-					break;
-				case 4:
-					ll_sort(clon,employee_compareBySueldo,criterio);
-					if(criterio)
-					{
-						printf("Se ha ordenado la lista por sueldo ascendente");
-					}
-					else
-					{
-						if(!criterio)
+						else
 						{
-							printf("Se ha ordenado la lista por sueldo descendente");
+							if(!criterio)
+							{
+								printf("Se ha ordenado la lista por horas descendente");
+							}
 						}
+						break;
+					case 4:
+						ll_sort(clon,employee_compareBySueldo,criterio);
+						if(criterio)
+						{
+							printf("Se ha ordenado la lista por sueldo ascendente");
+						}
+						else
+						{
+							if(!criterio)
+							{
+								printf("Se ha ordenado la lista por sueldo descendente");
+							}
 
-					}
-					break;
-				case 5:
-					controller_ListEmployee(clon);
-					break;
-			}
-		}while(stricmp(confirmar,"si"));
+						}
+						break;
+					case 5:
+						controller_ListEmployee(clon);
+						break;
+				}
+			}while(stricmp(confirmar,"si"));
+		}
 	}
 
     return isOk;
@@ -294,7 +345,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 	{
 		pArchivo = fopen(path,"w");
 
-		len=ll_len(pArrayListEmployee);
+		len = ll_len(pArrayListEmployee);
 
 		if(pArchivo!= NULL && len>0)
 		{
@@ -329,6 +380,37 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 	return isOk;
 }
 
+int controller_saveAsTextID(char* path , LinkedList* pArrayListEmployee, int id)
+{
+	int isOk = -1;
+	int idMayor;
+	FILE* pArchivo;
+
+	if(path!=NULL && pArrayListEmployee!=NULL)
+	{
+		if(id!=0)
+		{
+			idMayor = id;
+			isOk=0;
+		}
+		else
+		{
+			idMayor = ObtenerMayorId(pArrayListEmployee);
+		}
+
+		pArchivo = fopen(path,"w");
+
+		if(pArchivo!= NULL)
+		{
+			fprintf(pArchivo,"%d\n",idMayor);
+			isOk=0;
+		}
+
+		fclose(pArchivo);
+	}
+
+	return isOk;
+}
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo binario).
  *
  * \param path char*

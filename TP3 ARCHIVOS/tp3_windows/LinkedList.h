@@ -46,7 +46,7 @@ int ll_indexOf(LinkedList* this, void* pElement);//ME PASA EL INDEX DEL ELEMENTO
 int ll_isEmpty(LinkedList* this);
 int ll_push(LinkedList* this, int index, void* pElement);//METE UN EMPLEADO ENTRE OTRO
 void* ll_pop(LinkedList* this,int index);//BORRA UN EMPLEADO Y LO DEVUELVE
-int ll_contains(LinkedList* this, void* pElement);//probar usarla para ver si verifica si hay un empleado dentro de esa lista
+int ll_contains(LinkedList* this, void* pElement);
 int ll_containsAll(LinkedList* this,LinkedList* this2);
 LinkedList* ll_subList(LinkedList* this,int from,int to);
 LinkedList* ll_clone(LinkedList* this);

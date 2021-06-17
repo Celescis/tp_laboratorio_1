@@ -24,10 +24,7 @@ Employee* employee_new(void)//ME HABILITA UNA DIRECCION DE MEMORIA PARA UN NUEVO
 
 	if(pEmpleado!=NULL)
 	{
-		employee_setId(pEmpleado,id);
-		employee_setNombre(pEmpleado,nombre);
-		employee_setHorasTrabajadas(pEmpleado,horas);
-		employee_setSueldo(pEmpleado,sueldo);
+		employee_setVerifyInt(pEmpleado,id,nombre,horas,sueldo);
 	}
 
 	return pEmpleado;
@@ -43,7 +40,7 @@ Employee* employee_newParametros(char* idStr, char* nombreStr, char* horasTrabaj
 	{
 		if(pEmpleadoParam!=NULL)
 		{
-			if((employee_setVerify(pEmpleadoParam,idStr,nombreStr,horasTrabajadasStr,sueldoStr))!=0)
+			if((employee_setVerifyChar(pEmpleadoParam,idStr,nombreStr,horasTrabajadasStr,sueldoStr))!=0)
 			{
 				employee_delete(pEmpleadoParam);
 			}
@@ -72,7 +69,7 @@ int ObtenerMayorId (LinkedList* listaEmpleados)
 
 	if(listaEmpleados!=NULL)
 	{
-		len=ll_len(listaEmpleados);
+		len = ll_len(listaEmpleados);
 
 		if(len>0)
 		{
@@ -89,7 +86,7 @@ int ObtenerMayorId (LinkedList* listaEmpleados)
 		}
 	}
 
-	return mayorId+=1;
+	return mayorId;
 }
 
 int employee_printOneEmployee(Employee* this)
@@ -163,7 +160,7 @@ int employee_findID(LinkedList* listaEmpleados, int id)
 
 		if(len>0)
 		{
-			for(i=0;i<len;i++)
+			for(i=0; i<len ;i++)
 			{
 				auxiliar = (Employee*)ll_get(listaEmpleados,i);
 				if(auxiliar->id==id)
@@ -178,16 +175,7 @@ int employee_findID(LinkedList* listaEmpleados, int id)
 	return index;
 }
 
-void employee_parser(char* idStr, char* nombreStr, char* horasTrabajadasStr, char* sueldoStr)
-{
-	atoi(idStr);
-	SizeString(nombreStr);
-	atoi(horasTrabajadasStr);
-	atoi(sueldoStr);
-}
-
-
-int employee_add(LinkedList* listaEmpleados)
+int employee_add(LinkedList* listaEmpleados, int* id)
 {
 	int isOk = -1;
 	char respuesta[4];
@@ -208,12 +196,10 @@ int employee_add(LinkedList* listaEmpleados)
 				!(utn_getInt("\nIngrese sueldo: ","\nError, reingrese: ",1,10000,3,&auxiliarSueldo))))
 			{
 				SizeString(auxiliarNombre);
-				auxiliarID = ObtenerMayorId(listaEmpleados);
+				*id+=1;
+				auxiliarID = *id;
 
-				if((!(employee_setId(auxEmpleado,auxiliarID)) &&
-				!(employee_setNombre(auxEmpleado,auxiliarNombre)) &&
-				!(employee_setHorasTrabajadas(auxEmpleado,auxiliarHoras)) &&
-				!(employee_setSueldo(auxEmpleado,auxiliarSueldo))))
+				if(!employee_setVerifyInt(auxEmpleado,auxiliarID,auxiliarNombre,auxiliarHoras,auxiliarSueldo))
 				{
 					employee_printOneEmployee(auxEmpleado);
 					utn_getString("\n¿Esta seguro que desea guardar este empleado?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,respuesta);
@@ -254,7 +240,7 @@ int employee_remove(LinkedList* listaEmpleados)
 	if(listaEmpleados!=NULL)
 	{
 		employee_printList(listaEmpleados);
-		utn_getInt("Ingrese el ID para dar de baja\n","Error, ID invalido\n",1,5000,3,&id);
+		utn_getInt("Ingrese el ID para dar de baja: \n","Error, ID invalido\n",1,5000,3,&id);
 		index = employee_findID(listaEmpleados,id);
 
 		if(index!=-1)
@@ -278,11 +264,6 @@ int employee_remove(LinkedList* listaEmpleados)
 			printf("No se pudo encontrar el ID\n");
 		}
 	}
-	else
-	{
-		printf("Error. Imposible realizar una baja\n");
-
-	}
 
 	return isOk;
 }
@@ -292,14 +273,10 @@ int employee_modify(LinkedList* listaEmpleados)
 	int isOk = -1;
 	int id;
 	int index = -1;
-	int opciones;
 	char respuesta[4];
 	char confirmar[4];
-	char auxNombre[128];
-	int auxHoras;
-	int auxSueldo;
-	Employee auxiliar;
 	Employee* aux;
+	Employee auxiliar;
 	strcpy(confirmar,"no");
 
 	if(listaEmpleados!=NULL)
@@ -307,11 +284,11 @@ int employee_modify(LinkedList* listaEmpleados)
 		employee_printList(listaEmpleados);
 		utn_getInt("Ingrese el ID para modificar\n","Error, ID invalido\n",1,5000,3,&id);
 		index = employee_findID(listaEmpleados,id);
-		aux = (Employee*) ll_get(listaEmpleados,index);
-		auxiliar = *aux;
 
 		if(index!=-1)
 		{
+			aux = (Employee*) ll_get(listaEmpleados,index);
+			auxiliar=*aux;
 			employee_printOneEmployee(&auxiliar);
 			utn_getString("\n¿Esta seguro que desea editar este empleado?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,respuesta);
 
@@ -325,51 +302,13 @@ int employee_modify(LinkedList* listaEmpleados)
 							utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
 							break;
 						case 1:
-							printf("\t****MODIFICAR NOMBRE****\t\n");
-							utn_getString("Ingrese el nombre\n","Error, nombre invalido\n",128,3,auxNombre);
-							SizeString(auxNombre);
-							strcpy(auxiliar.nombre,auxNombre);
-							employee_printOneEmployee(&auxiliar);
-
-							utn_getInt("\n¿Esta seguro que desea modificarlo? [1/0]\n","\nRespuesta invalida, ingrese [1/0]\n",0,1,3,&opciones);
-							if(opciones)
-							{
-								employee_modifyNombre(listaEmpleados,index,auxNombre);
-							}
-							else
-							{
-								printf("Modificacion cancelada");
-							}
+							employee_caseNombre(listaEmpleados,index,auxiliar);
 							break;
 						case 2:
-							printf("\t****MODIFICAR HORAS****\t\n");
-							utn_getInt("Ingrese la nueva cantidad de horas\n","Error, cantidad invalida\n",1,100,3,&auxHoras);
-							auxiliar.horasTrabajadas=auxHoras;
-							employee_printOneEmployee(&auxiliar);
-							utn_getInt("\n¿Esta seguro que desea modificarlo? [1/0]\n","\nRespuesta invalida, ingrese [1/0]\n",0,1,3,&opciones);
-							if(opciones)
-							{
-								employee_modifyHorasTrabajadas(listaEmpleados,index,auxHoras);
-							}
-							else
-							{
-								printf("Modificacion cancelada");
-							}
+							employee_caseHoras(listaEmpleados,index,auxiliar);
 							break;
 						case 3:
-							printf("\t****MODIFICAR SUELDO****\t\n");
-							utn_getInt("Ingrese el nuevo sueldo \n","Error, cantidad invalida\n",1000,100000,3,&auxSueldo);
-							auxiliar.sueldo=auxSueldo;
-							employee_printOneEmployee(&auxiliar);
-							utn_getInt("\n¿Esta seguro que desea modificarlo? [1/0]\n","\nRespuesta invalida, ingrese [1/0]\n",0,1,3,&opciones);
-							if(opciones)
-							{
-								employee_modifySueldo(listaEmpleados,index,auxSueldo);
-							}
-							else
-							{
-								printf("Modificacion cancelada");
-							}
+							employee_caseSueldo(listaEmpleados,index,auxiliar);
 							break;
 					}
 				}while(stricmp(confirmar,"si"));
@@ -388,13 +327,95 @@ int employee_modify(LinkedList* listaEmpleados)
 	else
 	{
 		printf("Error. Imposible realizar una modificacion\n");
-
 	}
 
 	return isOk;
 }
 
-int employee_setVerify(Employee* this, char* idStr, char* nombreStr, char* horasTrabajadasStr, char* sueldoStr)
+int employee_caseNombre(LinkedList* listaEmpleados, int index, Employee auxiliar)
+{
+	int isOk = -1;
+	char auxNombre[128];
+	int opciones;
+
+	if(listaEmpleados!=NULL && index!=-1)
+	{
+		printf("\t****MODIFICAR NOMBRE****\t\n");
+		utn_getString("Ingrese el nuevo nombre\n","Error, nombre invalido\n",128,3,auxNombre);
+		SizeString(auxNombre);
+
+		strcpy(auxiliar.nombre,auxNombre);
+		employee_printOneEmployee(&auxiliar);
+
+		utn_getInt("\n¿Esta seguro que desea modificarlo? [1/0]\n","\nRespuesta invalida, ingrese [1/0]\n",0,1,3,&opciones);
+		if(opciones)
+		{
+			employee_modifyNombre(listaEmpleados,index,auxNombre);
+			isOk=0;
+		}
+		else
+		{
+			printf("Modificacion cancelada");
+		}
+	}
+
+	return isOk;
+}
+
+int employee_caseHoras(LinkedList* listaEmpleados, int index, Employee auxiliar)
+{
+	int isOk = -1;
+	int auxHoras;
+	int opciones;
+
+	if(listaEmpleados!=NULL && index!=-1)
+	{
+		printf("\t****MODIFICAR HORAS****\t\n");
+		utn_getInt("Ingrese la nueva cantidad de horas\n","Error, cantidad invalida\n",1,100,3,&auxHoras);
+		auxiliar.horasTrabajadas=auxHoras;
+		employee_getHorasTrabajadas(&auxiliar,&auxHoras);
+		employee_printOneEmployee(&auxiliar);
+		utn_getInt("\n¿Esta seguro que desea modificarlo? [1/0]\n","\nRespuesta invalida, ingrese [1/0]\n",0,1,3,&opciones);
+		if(opciones)
+		{
+			employee_modifyHorasTrabajadas(listaEmpleados,index,auxHoras);
+			isOk=0;
+		}
+		else
+		{
+			printf("Modificacion cancelada");
+		}
+	}
+	return isOk;
+}
+
+int employee_caseSueldo(LinkedList* listaEmpleados, int index, Employee auxiliar)
+{
+	int isOk = -1;
+	int auxSueldo;
+	int opciones;
+
+	if(listaEmpleados!=NULL && index!=-1)
+	{
+		printf("\t****MODIFICAR SUELDO****\t\n");
+		utn_getInt("Ingrese el nuevo sueldo \n","Error, cantidad invalida\n",1000,100000,3,&auxSueldo);
+		auxiliar.sueldo=auxSueldo;
+		employee_printOneEmployee(&auxiliar);
+		utn_getInt("\n¿Esta seguro que desea modificarlo? [1/0]\n","\nRespuesta invalida, ingrese [1/0]\n",0,1,3,&opciones);
+		if(opciones)
+		{
+			employee_modifySueldo(listaEmpleados,index,auxSueldo);
+			isOk=0;
+		}
+		else
+		{
+			printf("Modificacion cancelada");
+		}
+	}
+	return isOk;
+}
+
+int employee_setVerifyChar(Employee* this, char* idStr, char* nombreStr, char* horasTrabajadasStr, char* sueldoStr)
 {
 	int isOk = -1;
 
@@ -404,6 +425,24 @@ int employee_setVerify(Employee* this, char* idStr, char* nombreStr, char* horas
 		!(employee_setNombre(this,nombreStr)) &&
 		!(employee_setHorasTrabajadas(this,atoi(horasTrabajadasStr))) &&
 		!(employee_setSueldo(this,atoi(sueldoStr)))))
+		{
+			isOk=0;
+		}
+	}
+
+	return isOk;
+}
+
+int employee_setVerifyInt(Employee* this, int id, char* nombre, int horasTrabajadas, int sueldo)
+{
+	int isOk = -1;
+
+	if(this!=NULL && id>0 && nombre!=NULL && horasTrabajadas>0 && sueldo>0)
+	{
+		if((!(employee_setId(this,id)) &&
+		!(employee_setNombre(this,nombre)) &&
+		!(employee_setHorasTrabajadas(this,horasTrabajadas)) &&
+		!(employee_setSueldo(this,sueldo))))
 		{
 			isOk=0;
 		}
@@ -438,6 +477,20 @@ int employee_setId(Employee* this, int id)
 	if(this!=NULL && id>0)
 	{
 		this->id = id;
+		isOk=0;
+	}
+
+	return isOk;
+}
+
+int employee_setIdTxt(Employee* this, char* id)
+{
+	int isOk = -1;
+
+	if(this!=NULL && id!=NULL)
+	{
+		//sprintf(id,"%d",this->id);
+		this->id=atoi(id);
 		isOk=0;
 	}
 
@@ -482,6 +535,7 @@ int employee_setSueldo(Employee* this, int sueldo)
 
 	return isOk;
 }
+
 //---------------------------------------------GETTERS---------------------------------------------
 int employee_getId(Employee* this, int* id)
 {
