@@ -26,7 +26,7 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 	{
 		do
 		{
-			cantidad = fscanf(pFile,"%[^,] , %[^,] , %[^,] , %[^\n]\n",id,nombre,horas,sueldo);//FALSA LECTURA SI LO PONGO FUERA DOWHILE
+			cantidad = fscanf(pFile,"%[^,] , %[^,] , %[^,] , %[^\n]\n",id,nombre,horas,sueldo);
 
 			if((cantidad==4) && (header!=1))
 			{
@@ -36,6 +36,10 @@ int parser_EmployeeFromText(FILE* pFile , LinkedList* pArrayListEmployee)
 				{
 					ll_add(pArrayListEmployee, auxiliar);
 					isOk=0;
+				}
+				else
+				{
+					employee_delete(auxiliar);
 				}
 			}
 			else
@@ -53,7 +57,9 @@ int parser_IdFromText(FILE* pFile , LinkedList* pArrayListEmployee, int* id)
 {
 	int isOk = -1;
 	char idTxt[128];
+	int idInt;
 	int cantidad = 0;
+	int header=1;
 
 	if(pFile!=NULL && pArrayListEmployee!=NULL)
 	{
@@ -61,10 +67,19 @@ int parser_IdFromText(FILE* pFile , LinkedList* pArrayListEmployee, int* id)
 		{
 			cantidad = fscanf(pFile,"%[^\n]\n",idTxt);
 
-			if(cantidad==1)
+			if((cantidad==1) && (header!=1))
 			{
 				isOk = 0;
-				*id = atoi(idTxt);
+				idInt = atoi(idTxt);
+
+				if(idInt>*id)
+				{
+					*id=idInt;
+				}
+			}
+			else
+			{
+				header=0;
 			}
 		}
 		while(!feof(pFile));

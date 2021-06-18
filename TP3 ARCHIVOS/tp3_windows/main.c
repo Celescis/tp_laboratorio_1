@@ -36,9 +36,12 @@ int main()
 {
 	setbuf(stdout,NULL);
 	char confirmar[4];
+	int opcion = 0;
 	int flagTxt = NO_REALIZADO;
 	int flagBin = NO_REALIZADO;
-	int id=0;
+	int flagSaveTxt = NO_REALIZADO;
+	int flagSaveBin = NO_REALIZADO;
+	int id=1000;
 	strcpy(confirmar,"no");
 	LinkedList* listaEmpleados = ll_newLinkedList();
 
@@ -49,14 +52,31 @@ int main()
 			case 1:
 				if(ll_isEmpty(listaEmpleados) || (flagTxt==NO_REALIZADO && flagBin==NO_REALIZADO))
 				{
-					if(!controller_loadFromText("data.csv", listaEmpleados))
+					printf("\nElegir el archivo a cargar: \n");
+					utn_getInt("\n1. Cargar lista original. \n2. Cargar lo ultimo guardado. \n","\nRespuesta invalida, ingrese [1/2]\n",1,2,3,&opcion);
+					if(opcion==1)
 					{
-						flagTxt=REALIZADO;
+						if(!controller_loadFromText("data.csv", listaEmpleados))
+						{
+							flagTxt=REALIZADO;
+						}
+						else
+						{
+							flagTxt=NO_REALIZADO;
+						}
 					}
 					else
 					{
-						flagTxt=NO_REALIZADO;
+						if(!controller_loadFromText("data2.csv", listaEmpleados))
+						{
+							flagTxt=REALIZADO;
+						}
+						else
+						{
+							flagTxt=NO_REALIZADO;
+						}
 					}
+
 				}
 				else
 				{
@@ -81,7 +101,7 @@ int main()
 				}
 				break;
 			case 3:
-				if((!controller_loadFromTextID("id.csv", listaEmpleados, &id)) && (!controller_addEmployee(listaEmpleados,&id)))
+				if(!controller_addEmployee(listaEmpleados,&id))
 				{
 					controller_saveAsTextID("id.csv",listaEmpleados,id);
 				}
@@ -130,7 +150,8 @@ int main()
 				if(!ll_isEmpty(listaEmpleados))
 				{
 					controller_saveAsText("data2.csv",listaEmpleados);
-					//controller_saveAsTextID("id.csv",listaEmpleados,id);
+					controller_saveAsTextID("id.csv",listaEmpleados,id);
+					flagSaveTxt=REALIZADO;
 				}
 				else
 				{
@@ -141,6 +162,8 @@ int main()
 				if(!ll_isEmpty(listaEmpleados))
 				{
 					controller_saveAsBinary("data.bin",listaEmpleados);
+					controller_saveAsTextID("id.csv",listaEmpleados,id);
+					flagSaveBin=REALIZADO;
 				}
 				else
 				{
@@ -148,7 +171,29 @@ int main()
 				}
 				break;
 			case 10:
-				utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
+				if((flagSaveTxt==NO_REALIZADO) && (flagSaveBin==NO_REALIZADO))
+				{
+					utn_getString("\n¿Esta seguro que desea salir sin guardar?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
+					if(stricmp(confirmar,"si"))
+					{
+						utn_getInt("\n1. Guardar modo texto\n2. Guardar modo binario\n","\nRespuesta invalida, ingrese [1/2]\n",1,2,3,&opcion);
+						if(opcion==1)
+						{
+							controller_saveAsText("data2.csv",listaEmpleados);
+							strcpy(confirmar,"si");
+						}
+						else
+						{
+							controller_saveAsBinary("data.bin",listaEmpleados);
+							strcpy(confirmar,"si");
+						}
+					}
+				}
+				else
+				{
+					strcpy(confirmar,"si");
+				}
+
 				break;
 		}
 	}while(stricmp(confirmar,"si"));

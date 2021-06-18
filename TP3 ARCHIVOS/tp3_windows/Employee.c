@@ -34,10 +34,10 @@ Employee* employee_newParametros(char* idStr, char* nombreStr, char* horasTrabaj
 {
 	Employee* pEmpleadoParam = NULL;
 
-	pEmpleadoParam = employee_new();
-
 	if(idStr!=NULL && nombreStr!=NULL && horasTrabajadasStr!=NULL && sueldoStr!=NULL)
 	{
+		pEmpleadoParam = employee_new();
+
 		if(pEmpleadoParam!=NULL)
 		{
 			if((employee_setVerifyChar(pEmpleadoParam,idStr,nombreStr,horasTrabajadasStr,sueldoStr))!=0)
@@ -133,7 +133,7 @@ int employee_printList(LinkedList* listaEmpleados)
 
 			for(i=0; i<len ;i++)
 			{
-				aux = ll_get(listaEmpleados,i);
+				aux = (Employee*) ll_get(listaEmpleados,i);
 
 				if(aux != NULL)
 				{
@@ -185,7 +185,7 @@ int employee_add(LinkedList* listaEmpleados, int* id)
 	int auxiliarSueldo;
 	Employee* auxEmpleado = NULL;
 
-	if(listaEmpleados!=NULL)
+	if(listaEmpleados!=NULL && id!=NULL)
 	{
 		auxEmpleado = employee_new();
 
@@ -196,8 +196,8 @@ int employee_add(LinkedList* listaEmpleados, int* id)
 				!(utn_getInt("\nIngrese sueldo: ","\nError, reingrese: ",1,10000,3,&auxiliarSueldo))))
 			{
 				SizeString(auxiliarNombre);
-				*id+=1;
 				auxiliarID = *id;
+				auxiliarID+=1;
 
 				if(!employee_setVerifyInt(auxEmpleado,auxiliarID,auxiliarNombre,auxiliarHoras,auxiliarSueldo))
 				{
@@ -207,6 +207,7 @@ int employee_add(LinkedList* listaEmpleados, int* id)
 					if(!(stricmp(respuesta,"si")))
 					{
 						ll_add(listaEmpleados, auxEmpleado);
+						*id=auxiliarID;
 						isOk=0;
 					}
 					else
@@ -477,20 +478,6 @@ int employee_setId(Employee* this, int id)
 	if(this!=NULL && id>0)
 	{
 		this->id = id;
-		isOk=0;
-	}
-
-	return isOk;
-}
-
-int employee_setIdTxt(Employee* this, char* id)
-{
-	int isOk = -1;
-
-	if(this!=NULL && id!=NULL)
-	{
-		//sprintf(id,"%d",this->id);
-		this->id=atoi(id);
 		isOk=0;
 	}
 

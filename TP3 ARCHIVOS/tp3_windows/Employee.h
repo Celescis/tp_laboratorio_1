@@ -29,7 +29,6 @@ int employee_getVerify(Employee* this, int* id, char* nombre, int* horasTrabajad
 
 //ID
 int employee_setId(Employee* this, int id);
-int employee_setIdTxt(Employee* this, char* id);
 int employee_getId(Employee* this, int* id);
 int ObtenerMayorId(LinkedList* listaEmpleados);
 int employee_compareById(void* empleado1, void* empleado2);

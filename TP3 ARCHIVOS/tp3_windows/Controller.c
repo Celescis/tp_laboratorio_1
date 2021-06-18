@@ -35,7 +35,6 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 		else
 		{
 			printf("Error al abrir el archivo\n");
-			exit(10);
 		}
 		fclose(pArchivo);
 	}
@@ -110,16 +109,23 @@ int controller_addEmployee(LinkedList* pArrayListEmployee, int* id)
 {
 	int isOk = -1;
 	int opcion;
+	int auxId;
 	int i=0;
 
-	if(pArrayListEmployee!=NULL)
+	if(pArrayListEmployee!=NULL && id!=NULL)
 	{
+
+		controller_loadFromTextID("id.csv", pArrayListEmployee, id);
+
+		auxId=*id;
+
 		printf("ALTA DE EMPLEADOS\n");
 		utn_getInt("\n¿Cuantos empleados desea dar de alta?: ","\nError, reingrese: ",1,10,3,&opcion);
 		do
 		{
-			if(!employee_add(pArrayListEmployee,id))
+			if(!employee_add(pArrayListEmployee,&auxId))
 			{
+				*id=auxId;
 				isOk=0;
 			}
 			i++;
@@ -349,9 +355,10 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 
 		if(pArchivo!= NULL && len>0)
 		{
+			fprintf(pArchivo,"id,nombre,horasTrabajadas,sueldo\n");
 			for(i=0; i<len ;i++)
 			{
-				aux = ll_get(pArrayListEmployee,i);
+				aux = (Employee*) ll_get(pArrayListEmployee,i);
 				if(aux!=NULL)
 				{
 					if(!employee_getVerify(aux,&auxiliarID,auxiliarNombre,&auxiliarHoras,&auxiliarSueldo))
@@ -371,8 +378,9 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 		{
 			printf("Error al abrir el archivo\n");
 		}
+		fclose(pArchivo);
 	}
-	fclose(pArchivo);
+
 	if(!isOk)
 	{
 		printf("El archivo fue guardado con exito!\n");
@@ -383,12 +391,12 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 int controller_saveAsTextID(char* path , LinkedList* pArrayListEmployee, int id)
 {
 	int isOk = -1;
-	int idMayor;
+	int idMayor = 0;
 	FILE* pArchivo;
 
 	if(path!=NULL && pArrayListEmployee!=NULL)
 	{
-		if(id!=0)
+		if(id==1000)
 		{
 			idMayor = id;
 			isOk=0;
@@ -402,6 +410,7 @@ int controller_saveAsTextID(char* path , LinkedList* pArrayListEmployee, int id)
 
 		if(pArchivo!= NULL)
 		{
+			fprintf(pArchivo,"Siguiente ID:\n");
 			fprintf(pArchivo,"%d\n",idMayor);
 			isOk=0;
 		}
@@ -429,6 +438,7 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 	if(path!=NULL && pArrayListEmployee!=NULL)
 	{
 		len = ll_len(pArrayListEmployee);
+
 		pArchivo = fopen(path,"wb");
 
 		if(pArchivo!= NULL && len>0)
@@ -443,12 +453,12 @@ int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 					isOk=0;
 				}
 			}
-			fclose(pArchivo);
 		}
 		else
 		{
 			printf("Error al abrir el archivo\n");
 		}
+		fclose(pArchivo);
 		if(!isOk)
 		{
 			printf("Se guardo con exito\n");
