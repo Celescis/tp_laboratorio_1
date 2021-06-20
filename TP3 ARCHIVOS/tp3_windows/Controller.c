@@ -120,7 +120,7 @@ int controller_addEmployee(LinkedList* pArrayListEmployee, int* id)
 		auxId=*id;
 
 		printf("ALTA DE EMPLEADOS\n");
-		utn_getInt("\n¿Cuantos empleados desea dar de alta?: ","\nError, reingrese: ",1,10,3,&opcion);
+		utn_getInt("\nÂ¿Cuantos empleados desea dar de alta?: ","\nError, reingrese: ",1,10,3,&opcion);
 		do
 		{
 			if(!employee_add(pArrayListEmployee,&auxId))
@@ -185,7 +185,7 @@ int controller_removeEmployee(LinkedList* pArrayListEmployee)
 	if(pArrayListEmployee!=NULL)
 	{
 		printf("BAJA DE EMPLEADOS\n");
-		utn_getInt("\n¿Cuantos empleados desea dar de baja?: ","\nError, reingrese: ",1,10,3,&opcion);
+		utn_getInt("\nÂ¿Cuantos empleados desea dar de baja?: ","\nError, reingrese: ",1,10,3,&opcion);
 
 		do
 		{
@@ -255,7 +255,8 @@ int controller_sortEmployee(LinkedList* pArrayListEmployee)
 				switch(opcion)
 				{
 					case 0:
-						utn_getString("\n¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
+						utn_getString("\nÂ¿Esta seguro que desea salir?[si/no]\n","\nRespuesta invalida, ingrese [si/no]\n",4,3,confirmar);
+						ll_deleteLinkedList(clon);
 						break;
 					case 1:
 						if(!ll_sort(clon,employee_compareById,criterio))
