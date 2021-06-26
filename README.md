@@ -1,2 +1,2 @@
 # tp_laboratorio_1
-Trabajos prácticos cursada con Eclipse
+Trabajos prácticos cursada con Eclipse IDE
